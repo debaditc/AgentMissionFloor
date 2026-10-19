@@ -1,0 +1,16 @@
+{
+  "session_id": "abc12345-0000-4000-8000-000000000001",
+  "transcript_path": "/Users/deb/.claude/projects/-x/abc.jsonl",
+  "cwd": "/Users/deb/code/app",
+  "permission_mode": "default",
+  "hook_event_name": "PostToolUseFailure",
+  "tool_name": "Bash",
+  "tool_use_id": "toolu_03",
+  "tool_input": {
+    "command": "npm test",
+    "description": "Run test suite"
+  },
+  "error": "Exit code 1\nError: Cannot find module 'express'",
+  "is_interrupt": false,
+  "duration_ms": 4187
+}

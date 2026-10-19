@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentMissionFloor</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 29 10.5v11L16 29 3 21.5v-11z' fill='%231f6feb'/%3E%3Cpath d='M16 3 29 10.5 16 18 3 10.5z' fill='%235aa2ff'/%3E%3C/svg%3E">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true"><path d="M16 3 29 10.5v11L16 29 3 21.5v-11z" fill="#1f6feb"/><path d="M16 3 29 10.5 16 18 3 10.5z" fill="#5aa2ff"/></svg>
+    <span>AgentMissionFloor</span>
+  </div>
+  <span class="repo-chip" id="repo-chip" title="Project folder"><span id="repo">no session</span></span>
+  <select id="project" class="repo-chip project-pick" aria-label="Show one project" hidden></select>
+  <nav class="tabs" aria-label="Views">
+    <button type="button" class="tab active" data-mode="live" aria-current="page">Office floor</button>
+    <button type="button" class="tab" data-mode="inbox">Your inbox <span id="inbox-badge" class="badge" hidden>0</span></button>
+    <button type="button" class="tab" data-mode="replay">Replay</button>
+  </nav>
+  <div class="status"><div id="presence" class="presence" role="group" aria-label="Who's in the office"></div><span id="live" class="live">Offline</span></div>
+</header>
+<main class="layout">
+  <div class="left">
+    <div class="scene-card">
+      <div id="scene"></div>
+      <div id="overlay" aria-live="off"></div>
+      <div id="hud" class="hud" hidden></div>
+      <div id="replay-badge" class="replay-badge" hidden>Replay</div>
+      <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+      <div id="zone-tip" class="zone-tip" hidden></div>
+      <div class="scene-tools">
+        <button type="button" id="board-btn" class="tool" title="Read the mission board (B)">Board</button>
+        <button type="button" id="focus-btn" class="tool" title="Focus mode: just the office (F)">Focus</button>
+        <button type="button" id="help-btn" class="tool round" title="How to read the office" aria-label="How to read the office">?</button>
+      </div>
+      <div id="sheet" class="sheet-host" hidden></div>
+      <div id="help" class="help" hidden></div>
+      <div id="digest" class="digest" role="status" hidden></div>
+      <div class="signature" aria-hidden="true">© Debaditya Chakravorty · Deb</div>
+    </div>
+    <div id="timeline" class="timeline" hidden></div>
+  </div>
+  <aside id="panel" class="panel" aria-label="Team panel"></aside>
+</main>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

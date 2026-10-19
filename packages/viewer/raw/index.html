@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentMissionFloor · raw</title>
+<style>
+  :root {
+    --page: #f3f5f7; --panel: #ffffff; --border: #e3e7ec; --text: #1d2433; --muted: #5b6576;
+    --amber: #f2a900; --amber-soft: #fff4cc; --red: #c4361b; --green: #2e9d4f;
+    --todo: #ffe27a; --doing: #ffc2d6; --done: #bfe8c4;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --ui: Rubik, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--text); font: 14px/1.45 var(--ui); }
+  header { display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: var(--panel); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 2; }
+  header h1 { font-size: 16px; margin: 0; font-weight: 700; }
+  .tabs { display: flex; gap: 4px; margin-left: 8px; }
+  .tab { padding: 6px 12px; border-radius: 8px; color: var(--muted); text-decoration: none; font-weight: 500; }
+  .tab:hover { color: var(--text); background: var(--page); }
+  .tab.active { background: #eaf1fd; color: #1f6feb; }
+  .tab:focus-visible { outline: 2px solid #1f6feb; outline-offset: 2px; }
+  .chip { font: 12px var(--mono); padding: 2px 8px; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); background: var(--page); }
+  #status { margin-left: auto; color: var(--muted); }
+  #conn::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; background: var(--red); vertical-align: 1px; }
+  #conn.live::before { background: var(--green); }
+  main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px; padding: 16px 20px; }
+  @media (max-width: 1000px) { main { grid-template-columns: minmax(0, 1fr); } }
+  section { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+  section + section { margin-top: 16px; }
+  h2 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-size: 12px; color: var(--muted); font-weight: 500; }
+  td.mono, .mono { font-family: var(--mono); font-size: 12px; }
+  tr.gone td { color: var(--muted); opacity: .6; }
+  tr.waiting td { background: var(--amber-soft); }
+  tr.intern td:first-child { padding-left: 24px; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+  .intern .dot { outline: 1.5px dashed currentColor; outline-offset: 1px; }
+  .mem { display: inline-flex; align-items: center; gap: 6px; }
+  .bar { width: 56px; height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
+  .bar > i { display: block; height: 100%; }
+  .status { font-size: 12px; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border); }
+  .status.waiting { border-color: var(--amber); color: #7a5600; }
+  .status.error { border-color: var(--red); color: var(--red); }
+  .board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .col h3 { margin: 0 0 6px; font-size: 12px; color: var(--muted); }
+  .card { padding: 6px 8px; border-radius: 4px; margin-bottom: 6px; font-size: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .card small { display: block; color: #4a5466; font-family: var(--mono); font-size: 11px; }
+  .card.pending { background: var(--todo); } .card.in_progress { background: var(--doing); } .card.completed { background: var(--done); }
+  .card.failed { box-shadow: inset 6px 0 0 var(--red); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stat { border: 1px solid var(--border); border-radius: 8px; padding: 8px; }
+  .stat b { display: block; font: 600 18px var(--mono); }
+  .stat span { color: var(--muted); font-size: 12px; }
+  #log { max-height: 60vh; overflow: auto; font: 12px/1.5 var(--mono); }
+  #log div { display: grid; grid-template-columns: 90px 120px 92px minmax(0, 1fr); gap: 8px; padding: 2px 0; border-bottom: 1px dashed var(--border); }
+  #log div span:last-child { overflow-wrap: anywhere; }
+  #log .k-tool\.fail, #log .k-turn\.fail { color: var(--red); }
+  #log .k-permission, #log .needs { color: #7a5600; }
+  #filter { width: 100%; margin-bottom: 8px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font: 12px var(--mono); }
+  .mission { font-style: italic; margin: 0 0 8px; }
+  .empty { color: var(--muted); font-style: italic; }
+</style>
+</head>
+<body>
+<header>
+  <h1>AgentMissionFloor</h1>
+  <nav class="tabs" aria-label="Views">
+    <a class="tab" href="/">Office floor</a>
+    <a class="tab" href="/?view=inbox">Your inbox</a>
+    <a class="tab" href="/?view=replay">Replay</a>
+    <a class="tab active" href="/raw/" aria-current="page">Raw</a>
+  </nav>
+  <span class="chip">raw event log</span>
+  <span id="status">—</span>
+  <span id="conn" class="chip">offline</span>
+</header>
+<main>
+  <div>
+    <section>
+      <h2>Sessions</h2>
+      <table>
+        <thead><tr><th>Who</th><th>Station</th><th>Status</th><th>Activity</th><th>Task</th><th>Memory</th><th>Tools</th><th>Err</th></tr></thead>
+        <tbody id="actors"><tr><td colspan="8" class="empty">Waiting for the first event…</td></tr></tbody>
+      </table>
+    </section>
+    <section>
+      <h2>Event log</h2>
+      <input id="filter" placeholder="filter: kind, name, tool, text" autocomplete="off">
+      <div id="log"></div>
+    </section>
+  </div>
+  <div>
+    <section>
+      <h2>Mission board</h2>
+      <div id="missions"></div>
+      <div class="board">
+        <div class="col"><h3>To do</h3><div id="col-pending"></div></div>
+        <div class="col"><h3>Doing</h3><div id="col-in_progress"></div></div>
+        <div class="col"><h3>Done</h3><div id="col-completed"></div></div>
+      </div>
+    </section>
+    <section>
+      <h2>Today</h2>
+      <div class="stats">
+        <div class="stat"><b id="s-tools">0</b><span>tool calls</span></div>
+        <div class="stat"><b id="s-errors">0</b><span>errors</span></div>
+        <div class="stat"><b id="s-waiting">0</b><span>waiting on you</span></div>
+      </div>
+    </section>
+  </div>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "session_id": "abc12345-0000-4000-8000-000000000001",
+  "transcript_path": "/Users/deb/.claude/projects/-x/abc.jsonl",
+  "cwd": "/Users/deb/code/app",
+  "permission_mode": "default",
+  "hook_event_name": "UserPromptSubmit",
+  "prompt": "Fix the login bug"
+}

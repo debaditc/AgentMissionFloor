@@ -1,0 +1,60 @@
+#!/bin/sh
+# amb-send: forwards one Claude Code hook payload (stdin) to the local AgentMissionFloor collector.
+# Runs as an async hook, so Claude never waits on it. Always exits 0 and never writes to stdout
+# (hook stdout can reach Claude's context). Needs only /bin/sh and curl; perl is optional (ms clock).
+
+exec 2>/dev/null
+here=$(cd "$(dirname "$0")" && pwd)
+# Settings: AMF_* first, then the original AMB_* names. Data lives in ~/.agent-mission-floor
+# (or the pre-rename ~/.agent-mission-board until the collector migrates it).
+default_home="$HOME/.agent-mission-floor"
+[ -d "$default_home" ] || [ ! -d "$HOME/.agent-mission-board" ] || default_home="$HOME/.agent-mission-board"
+AMB_HOME="${AMF_HOME:-${AMB_HOME:-$default_home}}"
+if [ "${AMF_DISABLED:-${AMB_DISABLED:-0}}" = "1" ]; then cat >/dev/null; exit 0; fi
+
+umask 077
+spool="$AMB_HOME/spool"
+[ -d "$spool" ] || { mkdir -p "$spool" && chmod 700 "$AMB_HOME" "$spool"; } || { cat >/dev/null; exit 0; }
+
+ms=$(perl -MTime::HiRes=time -e 'printf "%d", time*1000')
+case "$ms" in ''|*[!0-9]*) ms="$(date +%s)000" ;; esac
+id="$ms-$$"
+tmp="$spool/.$id.tmp"
+# At most what the collector accepts (2 MB); the rest is read and thrown away, never written.
+head -c 2097152 >"$tmp" || { rm -f "$tmp"; cat >/dev/null; exit 0; }
+cat >/dev/null
+
+# Only talk to the collector that wrote these files and is still running: after a crash another
+# program could own the remembered port, and it must never receive the token or the payload.
+url=$(cat "$AMB_HOME/sender.url")
+pid=$(sed -n 's/.*"pid": *\([0-9][0-9]*\).*/\1/p' "$AMB_HOME/runtime.json")
+if [ -n "$url" ] && [ -n "$pid" ] && kill -0 "$pid" && [ -f "$AMB_HOME/sender.headers" ] &&
+  curl -sf -o /dev/null --max-time 1 --connect-timeout 0.3 -X POST \
+    -H @"$AMB_HOME/sender.headers" -H "Content-Type: application/json" \
+    -H "X-AMB-Ts: $ms" -H "X-AMB-Id: $id" --data-binary @"$tmp" "$url"; then
+  rm -f "$tmp"
+  exit 0
+fi
+
+# Collector unreachable: keep the event for backfill (≤ 64 KB each, ≤ 2,000 files ≈ 128 MB max).
+# Files are user-only (umask 077) and deleted as soon as the collector reads them.
+size=$(wc -c <"$tmp" | tr -d ' ')
+count=$(ls "$spool" | wc -l | tr -d ' ')
+if [ "${size:-0}" -le 65536 ] && [ "${count:-0}" -lt 2000 ]; then
+  mv "$tmp" "$spool/$id.json"
+else
+  rm -f "$tmp"
+fi
+
+# A new session with no collector running: start one in the background (opt out: AMB_AUTOSTART=0).
+if [ "${AMF_AUTOSTART:-${AMB_AUTOSTART:-1}}" = "1" ] && grep -q '"hook_event_name" *: *"SessionStart"' "$spool/$id.json" &&
+  command -v node >/dev/null; then
+  # Found relative to this script (packages/{plugin/scripts,sender/bin} → packages/collector), never the cwd.
+  entry="${AMF_COLLECTOR_ENTRY:-${AMB_COLLECTOR_ENTRY:-$here/../../collector/src/main.ts}}"
+  # An installed plugin runs from Claude's plugin cache: `npm run setup` recorded where the repo is.
+  [ -f "$entry" ] || entry="$(sed -n 's/.*"repo": *"\([^"]*\)".*/\1/p' "$AMB_HOME/install.json")/packages/collector/src/main.ts"
+  if [ -f "$entry" ]; then
+    nohup node --disable-warning=ExperimentalWarning "$entry" --quiet >/dev/null 2>&1 &
+  fi
+fi
+exit 0

@@ -1,0 +1,12 @@
+{
+  "session_id": "abc12345-0000-4000-8000-000000000001",
+  "transcript_path": "/Users/deb/.claude/projects/-x/abc.jsonl",
+  "cwd": "/Users/deb/code/app",
+  "permission_mode": "default",
+  "hook_event_name": "SubagentStop",
+  "stop_hook_active": false,
+  "agent_id": "def456",
+  "agent_type": "Explore",
+  "agent_transcript_path": "~/.claude/projects/x/abc/subagents/agent-def456.jsonl",
+  "last_assistant_message": "Analysis complete."
+}

@@ -1,0 +1,18 @@
+{
+  "session_id": "abc12345-0000-4000-8000-000000000001",
+  "transcript_path": "/Users/deb/.claude/projects/-x/abc.jsonl",
+  "cwd": "/Users/deb/code/app",
+  "permission_mode": "default",
+  "hook_event_name": "PostToolUse",
+  "tool_name": "Write",
+  "tool_use_id": "toolu_02",
+  "tool_input": {
+    "file_path": "/path/to/file.txt",
+    "content": "file content"
+  },
+  "tool_response": {
+    "filePath": "/path/to/file.txt",
+    "type": "create"
+  },
+  "duration_ms": 12
+}

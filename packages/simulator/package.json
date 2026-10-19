@@ -1,0 +1,8 @@
+{
+  "name": "@agent-mission-floor/simulator",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": { "@agent-mission-floor/protocol": "*" },
+  "exports": { ".": "./src/index.ts" }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "@agent-mission-floor/collector",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": { "@agent-mission-floor/protocol": "*", "@agent-mission-floor/world": "*", "ws": "~8.22.0" },
+  "exports": { ".": "./src/index.ts" }
+}
