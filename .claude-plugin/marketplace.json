@@ -1,0 +1,12 @@
+{
+  "name": "agent-mission-floor",
+  "description": "AgentMissionFloor: a live 3D office for your Claude Code sessions, teammates and subagents.",
+  "owner": { "name": "Debaditya Chakravorty", "url": "https://github.com/debaditc" },
+  "plugins": [
+    {
+      "name": "agent-mission-floor",
+      "source": "./packages/plugin",
+      "description": "Silent async hooks that put your Claude Code sessions in a local 3D office. Local-only, zero token cost."
+    }
+  ]
+}
