@@ -1,0 +1,35 @@
+{
+  "name": "agent-mission-floor",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "collector": "node --disable-warning=ExperimentalWarning packages/collector/src/main.ts",
+    "sim": "node packages/simulator/src/cli.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --disable-warning=ExperimentalWarning --test \"packages/*/test/*.test.ts\"",
+    "sync:sender": "cp packages/sender/bin/amb-send packages/plugin/scripts/amb-send && chmod +x packages/plugin/scripts/amb-send",
+    "check": "npm run typecheck && npm test",
+    "open": "node --disable-warning=ExperimentalWarning packages/cli/src/cli.ts open",
+    "build": "npm run build -w @agent-mission-floor/viewer",
+    "postinstall": "npm run build",
+    "setup": "node --disable-warning=ExperimentalWarning packages/cli/src/cli.ts setup",
+    "doctor": "node --disable-warning=ExperimentalWarning packages/cli/src/cli.ts doctor",
+    "status": "node --disable-warning=ExperimentalWarning packages/cli/src/cli.ts status",
+    "stop": "node --disable-warning=ExperimentalWarning packages/cli/src/cli.ts stop",
+    "demo": "node --disable-warning=ExperimentalWarning packages/cli/src/cli.ts demo",
+    "uninstall": "node --disable-warning=ExperimentalWarning packages/cli/src/cli.ts uninstall"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "@types/ws": "^8.18.1",
+    "typescript": "~5.9.3"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

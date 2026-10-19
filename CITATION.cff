@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use AgentMissionFloor in your work, please cite it as below."
+title: "AgentMissionFloor: a live 3D office for Claude Code agent sessions"
+type: software
+authors:
+  - family-names: Chakravorty
+    given-names: Debaditya
+repository-code: "https://github.com/debaditc/AgentMissionFloor"
+url: "https://github.com/debaditc/AgentMissionFloor"
+license: MIT
+version: 0.1.0
+date-released: 2026-10-18
+keywords:
+  - claude-code
+  - ai-agents
+  - multi-agent
+  - observability
+  - visualization
+  - three-js
+abstract: >-
+  A live, local-only isometric 3D office in which Claude Code sessions,
+  agent-team teammates and subagents appear as people at work. It shows what
+  each agent is doing, its memory and token use, a shared mission board of
+  tasks, who needs the human's attention, and a replay of the day, with zero
+  token overhead.

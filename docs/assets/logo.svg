@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t">
+  <title id="t">AgentMissionFloor</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2b6fe8"/>
+      <stop offset="1" stop-color="#173f9e"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f1e8da"/>
+      <stop offset="1" stop-color="#e4d6c0"/>
+    </linearGradient>
+    <linearGradient id="wallR" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fbfbfa"/>
+      <stop offset="1" stop-color="#eef0f2"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#0b1f4d" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- App tile -->
+  <rect x="12" y="12" width="232" height="232" rx="54" fill="url(#bg)"/>
+  <rect x="12" y="12" width="232" height="116" rx="54" fill="#ffffff" opacity="0.06"/>
+
+  <g filter="url(#soft)">
+    <!-- Walls (cut-away room) -->
+    <polygon points="48,146 48,84 128,38 128,100" fill="#e6e9ed"/>
+    <polygon points="128,100 128,38 208,84 208,146" fill="url(#wallR)"/>
+    <!-- Sage wainscot band -->
+    <polygon points="48,146 48,128 128,82 128,100" fill="#d3dccd"/>
+    <polygon points="128,100 128,82 208,128 208,146" fill="#d6dccf"/>
+    <!-- Floor -->
+    <polygon points="128,100 208,146 128,192 48,146" fill="url(#floor)"/>
+    <polygon points="48,146 128,192 128,198 48,152" fill="#cbb994"/>
+    <polygon points="128,192 208,146 208,152 128,198" fill="#b9a681"/>
+  </g>
+
+  <!-- Mission board on the back wall: To do / Doing / Done -->
+  <polygon points="138,62 198,96 198,122 138,88" fill="#ffffff" stroke="#9aa3ad" stroke-width="1.5"/>
+  <polygon points="143,70 154,76 154,85 143,79" fill="#ffd862"/>
+  <polygon points="143,82 154,88 154,97 143,91" fill="#ffd862"/>
+  <polygon points="161,80 172,86 172,95 161,89" fill="#ff9fc0"/>
+  <polygon points="179,90 190,96 190,105 179,99" fill="#8fd59a"/>
+  <polygon points="179,102 190,108 190,117 179,111" fill="#8fd59a"/>
+
+  <!-- Window on the left wall -->
+  <polygon points="66,108 66,86 96,69 96,91" fill="#bfe3f7" stroke="#a7b3bf" stroke-width="1.5"/>
+
+  <!-- Desk -->
+  <polygon points="92,150 120,134 140,146 112,162" fill="#ffffff" stroke="#d4d0c8" stroke-width="1"/>
+  <polygon points="104,140 116,133 116,123 104,130" fill="#23272e"/>
+
+  <!-- Agent 1 (blue), at the desk -->
+  <ellipse cx="96" cy="164" rx="9" ry="4.5" fill="#1d2433" opacity="0.18"/>
+  <rect x="90" y="140" width="12" height="20" rx="6" fill="#1f6feb"/>
+  <circle cx="96" cy="134" r="7" fill="#f1c7a5"/>
+  <path d="M89 133a7 7 0 0 1 14 0c-3-2-11-2-14 0z" fill="#2d2420"/>
+
+  <!-- Agent 2 (orange), at the door with a question -->
+  <ellipse cx="164" cy="170" rx="9" ry="4.5" fill="#1d2433" opacity="0.18"/>
+  <rect x="158" y="146" width="12" height="20" rx="6" fill="#e07b00"/>
+  <circle cx="164" cy="140" r="7" fill="#c68d64"/>
+  <path d="M157 139a7 7 0 0 1 14 0c-3-2-11-2-14 0z" fill="#1c1c1c"/>
+  <!-- Raised hand -->
+  <rect x="170" y="128" width="4" height="14" rx="2" fill="#b86400" transform="rotate(14 172 135)"/>
+
+  <!-- "Needs you" bubble -->
+  <circle cx="184" cy="120" r="13" fill="#ffd34d" stroke="#f2a900" stroke-width="3"/>
+  <text x="184" y="126" text-anchor="middle" font-family="Rubik, Helvetica, Arial, sans-serif" font-size="17" font-weight="800" fill="#1d2433">!</text>
+</svg>
