@@ -2,7 +2,7 @@
   <img src="docs/assets/logo.svg" alt="Agent Mission Floor icon: a cut-away isometric office with a mission board, two agents, and an amber “needs you” bubble" width="128" height="128">
 </p>
 
-<h1 align="center">AgentMissionFloor</h1>
+<h1 align="center">Agent Mission Floor</h1>
 
 <p align="center">
   <b>Watch your AI agents work, live, in a 3D office.</b>
