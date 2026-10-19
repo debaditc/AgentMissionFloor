@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/logo.svg" alt="AgentMissionFloor icon: a cut-away isometric office with a mission board, two agents, and an amber “needs you” bubble" width="128" height="128">
+  <img src="docs/assets/logo.svg" alt="Agent Mission Floor icon: a cut-away isometric office with a mission board, two agents, and an amber “needs you” bubble" width="128" height="128">
 </p>
 
 <h1 align="center">AgentMissionFloor</h1>
