@@ -115,6 +115,9 @@ git clone https://github.com/debaditc/AgentMissionFloor.git
 cd AgentMissionFloor
 ```
 
+> **Downloaded the ZIP instead of cloning?** ZIP files drop the "executable" permission the hooks need.
+> Run `chmod +x packages/plugin/scripts/* packages/sender/bin/*` before `npm run setup`, or use `git clone`.
+
 **Step 3: install.** This installs the dependencies and builds the 3D office.
 
 ```sh
@@ -475,8 +478,13 @@ All optional, set as environment variables. The original `AMB_*` names still wor
 | *"This board needs its access link…"* or *"sign-in link has expired"* | Run `npm run open` once in this browser |
 | Anything else | `npm run doctor` says what's wrong and how to fix it |
 | Nobody shows up | Run `npm run setup`, then start a new Claude Code session (or try `npm run demo`) |
+| Nobody shows up, and `doctor` says all good | The hook scripts lost their execute bit (common after downloading the repo as a ZIP). Run `chmod +x packages/plugin/scripts/* packages/sender/bin/*`, then `chmod +x ~/.claude/plugins/cache/agent-mission-floor/agent-mission-floor/*/scripts/*`, and start a new Claude Code session |
 | The board is blank or old | `npm run build`, then reload |
 | Agents look slow or choppy | Press <kbd>`</kbd>; it drops to the *low* quality level automatically on slow GPUs |
+
+**Are hooks reaching the collector?** Run this and look for `hook` events from the last few minutes:
+`sqlite3 -readonly ~/.agent-mission-floor/events.db "select kind, source, datetime(ts/1000,'unixepoch','localtime') from events order by ts desc limit 10"`
+If you only see `watcher` events, the hooks aren't running.
 
 ## Project layout
 
